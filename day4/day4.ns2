@@ -1,0 +1,279 @@
+[label,main]
+~day4_pt1;
+~day4_pt2;
+
+[proc,day4_pt1]
+def_int $width = 5;
+def_int $height = 5;
+
+def_int $numbers(1000);
+def_int $numbers_length;
+
+def_int $table_numbers(10000);
+def_int $table_length;
+
+if (file_find("./source/aoc2021/day4/day4.txt") == true) {
+	def_string $numbers_string = file_line();
+	def_string $temp;
+
+	while (string_length($numbers_string) > 0) {
+		$temp, $numbers_string = ~split($numbers_string, ",");
+		$numbers($numbers_length++) = string_to_int($temp); 
+	}
+
+	def_string $line = file_line();
+
+	while (compare($line, "null") != 0) {
+		if (string_length($line) > 0) {
+			def_int $i;
+			while($i < 10) {
+				$temp, $line = ~split($line, " ");
+				if (string_length($temp) > 0) {
+					$table_numbers($table_length++) = string_to_int($temp);
+				}
+				$i++;
+			}
+		}
+
+		$line = file_line();
+	}
+}
+
+def_int $numbers_in_table = calc($width * $height);
+def_int $tables = calc($table_length / $numbers_in_table);
+def_boolean $bingo;
+
+def_int $numbers_pos;
+while ($numbers_pos < $numbers_length) {
+	def_int $current_number = $numbers($numbers_pos);
+		
+	def_int $table_pos;
+	while ($table_pos < $table_length) {	
+		if ($current_number == $table_numbers($table_pos)) {
+			$table_numbers($table_pos) = null;
+
+			def_int $var;
+			def_int $table;
+			while ($table < $tables) {
+				def_int $x;
+				def_int $y;
+				while ($y < $height) {
+					$x = 0;
+					$var = 0;
+					while ($x < $width) {
+						if ($table_numbers(calc($table * $numbers_in_table + $x + $y * $width)) == null) {
+							$var = setbit($var, $x);
+						}
+						$x++;
+					}
+					
+					if ($var == 31) {
+						$bingo = true;
+						break;
+					}
+					
+					$y++;
+				}
+				
+				$x = 0;
+				while ($x < $width) {
+					$y = 0;
+					$var = 0;
+					while ($y < $height) {
+						if ($table_numbers(calc($table * $numbers_in_table + $x + $y * $width)) == null) {
+							$var = setbit($var, $y);
+						}
+						$y++;
+					}
+					
+					if ($var == 31) {
+						$bingo = true;
+						break;
+					}
+					
+					$x++;
+				}
+				
+				if ($bingo == true) {
+					def_int $sum;
+					$x = 0;
+					while ($x < $width) {
+						$y = 0;
+						while ($y < $height) {
+							if ($table_numbers(calc($table * $numbers_in_table + $x + $y * $width)) != null) {
+								$sum += $table_numbers(calc($table * $numbers_in_table + $x + $y * $width));
+							}
+							$y++;
+						}
+						$x++;
+					}
+					
+					print("<calc($sum * $current_number)>");
+					break;
+				}
+				$table++;
+			}
+		}
+
+		$table_pos++;
+		if ($bingo == true) {
+			break;
+		}
+	}
+
+	$numbers_pos++;
+	if ($bingo == true) {
+		break;
+	}
+}
+
+[proc,day4_pt2]
+def_int $width = 5;
+def_int $height = 5;
+
+def_int $numbers(1000);
+def_int $numbers_length;
+
+def_int $table_numbers(10000);
+def_int $table_length;
+
+if (file_find("./source/aoc2021/day4/day4.txt") == true) {
+	def_string $numbers_string = file_line();
+	def_string $temp;
+
+	while (string_length($numbers_string) > 0) {
+		$temp, $numbers_string = ~split($numbers_string, ",");
+		$numbers($numbers_length++) = string_to_int($temp); 
+	}
+
+	def_string $line = file_line();
+
+	while (compare($line, "null") != 0) {
+		if (string_length($line) > 0) {
+			def_int $i;
+			while($i < 10) {
+				$temp, $line = ~split($line, " ");
+				if (string_length($temp) > 0) {
+					$table_numbers($table_length++) = string_to_int($temp);
+				}
+				$i++;
+			}
+		}
+
+		$line = file_line();
+	}
+}
+
+def_int $numbers_in_table = calc($width * $height);
+def_int $tables = calc($table_length / $numbers_in_table);
+def_int $table_bingo($tables);
+
+def_int $numbers_pos;
+while ($numbers_pos < $numbers_length) {
+	def_int $current_number = $numbers($numbers_pos);
+		
+	def_int $table_pos;
+	while ($table_pos < $table_length) {	
+		if ($current_number == $table_numbers($table_pos)) {
+			$table_numbers($table_pos) = null;
+
+			def_int $var;
+			def_int $table;
+			while ($table < $tables) {
+				def_boolean $bingo;
+				if ($table_bingo($table) != null) {
+					def_int $x;
+					def_int $y;
+					while ($y < $height) {
+						$x = 0;
+						$var = 0;
+						while ($x < $width) {
+							if ($table_numbers(calc($table * $numbers_in_table + $x + $y * $width)) == null) {
+								$var = setbit($var, $x);
+							}
+							$x++;
+						}
+						
+						if ($var == 31) {
+							$bingo = true;
+							break;
+						}
+						
+						$y++;
+					}
+					
+					$x = 0;
+					while ($x < $width) {
+						$y = 0;
+						$var = 0;
+						while ($y < $height) {
+							if ($table_numbers(calc($table * $numbers_in_table + $x + $y * $width)) == null) {
+								$var = setbit($var, $y);
+							}
+							$y++;
+						}
+						
+						if ($var == 31) {
+							$bingo = true;
+							break;
+						}
+						
+						$x++;
+					}
+					
+					if ($bingo == true) {
+						$table_bingo($table) = null;
+						
+						def_int $sum;
+						def_int $pos = 0;
+						while ($pos < $tables) {
+							if ($table_bingo($pos) != null) {
+								$sum++;
+							}
+							$pos++;
+						}
+						
+						if ($sum == 0) {
+							$sum = 0;
+							$x = 0;
+							while ($x < $width) {
+								$y = 0;
+								while ($y < $height) {
+									if ($table_numbers(calc($table * $numbers_in_table + $x + $y * $width)) != null) {
+										$sum += $table_numbers(calc($table * $numbers_in_table + $x + $y * $width));
+									}
+									$y++;
+								}
+								$x++;
+							}
+							
+							print("<calc($sum * $current_number)>");
+						}
+					}
+				}
+				$table++;
+			}
+		}
+
+		$table_pos++;
+	}
+
+	$numbers_pos++;
+}
+
+[proc,split](string $input, string $split)(string,string)
+def_int $input_length = string_length($input);
+if($input_length <= 0) {
+	return("", "");
+}
+def_int $split_text_index = string_indexof_string($input, $split, 0);
+if($split_text_index == -1) {
+	return($input, "");
+}
+if($split_text_index == 0) {
+	return("", substring($input, 1, $input_length));
+}
+if(calc($split_text_index + 1) >= $input_length) {
+	return(substring($input, 0, $split_text_index), "");
+}
+return(substring($input, 0, $split_text_index), substring($input, calc($split_text_index + 1), $input_length));
