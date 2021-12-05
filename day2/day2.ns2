@@ -10,7 +10,7 @@ if (file_find("./source/aoc2021/day2/day2.txt") == true) {
 	def_int $horizontal;
 	def_int $depth;
 	
-	while (string_length($line) > 0) {
+	while (compare($line, "null") != 0) {
 		$line, $value_string = ~split($line, " ");
 		$value = string_to_int($value_string);
 		if (compare($line, "forward") == 0) {
@@ -35,7 +35,7 @@ if (file_find("./source/aoc2021/day2/day2.txt") == true) {
 	def_int $depth;
 	def_int $aim;
 	
-	while (string_length($line) > 0) {
+	while (compare($line, "null") != 0) {
 		$line, $value_string = ~split($line, " ");
 		$value = string_to_int($value_string);
 		if (compare($line, "forward") == 0) {

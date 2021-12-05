@@ -13,7 +13,7 @@ def_int $i;
 if (file_find("./source/aoc2021/day3/day3.txt") == true) {
 	def_string $line = file_line();
 	
-	while (string_length($line) > 0) {
+	while (compare($line, "null") != 0) {
 		$i = 0;
 		while ($i < $bit_length) {
 			if (string_char_at($line, $i) == 48) {
@@ -62,7 +62,7 @@ def_int $number_length;
 if (file_find("./source/aoc2021/day3/day3.txt") == true) {
 	def_string $line = file_line();
 	
-	while (string_length($line) > 0) {
+	while (compare($line, "null") != 0) {
 		def_int $number;
 		def_int $i = 0;
 		while ($i < $bit_length) {
@@ -103,7 +103,7 @@ while ($bit < $bit_length) {
 	if (file_find("./source/aoc2021/day3/day3.txt") == true) {
 		def_string $line = file_line();
 
-		while (string_length($line) > 0) {
+		while (compare($line, "null") != 0) {
 			if (string_char_at($line, $bit) != $req_char) {
 				def_int $value = ~binary_to_dec($line, $bit_length);
 
@@ -165,7 +165,7 @@ while ($bit < $bit_length) {
 	if (file_find("./source/aoc2021/day3/day3.txt") == true) {
 		def_string $line = file_line();
 
-		while (string_length($line) > 0) {
+		while (compare($line, "null") != 0) {
 			if (string_char_at($line, $bit) != $req_char) {
 				def_int $value = ~binary_to_dec($line, $bit_length);
 
