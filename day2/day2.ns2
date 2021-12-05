@@ -1,0 +1,70 @@
+[label,main]
+~day2_pt1;
+~day2_pt2;
+
+[proc,day2_pt1]
+if (file_find("./source/aoc2021/day2/day2.txt") == true) {
+	def_string $value_string;
+	def_int $value;
+	def_string $line = file_line();
+	def_int $horizontal;
+	def_int $depth;
+	
+	while (string_length($line) > 0) {
+		$line, $value_string = ~split($line, " ");
+		$value = string_to_int($value_string);
+		if (compare($line, "forward") == 0) {
+			$horizontal += $value;
+		} else if (compare($line, "down") == 0) {
+			$depth += $value;
+		} else if (compare($line, "up") == 0) {
+			$depth -= $value;
+		}
+		$line = file_line();
+	}
+	
+	print("<calc($horizontal * $depth)>");
+}
+
+[proc,day2_pt2]
+if (file_find("./source/aoc2021/day2/day2.txt") == true) {
+	def_string $value_string;
+	def_int $value;
+	def_string $line = file_line();
+	def_int $horizontal;
+	def_int $depth;
+	def_int $aim;
+	
+	while (string_length($line) > 0) {
+		$line, $value_string = ~split($line, " ");
+		$value = string_to_int($value_string);
+		if (compare($line, "forward") == 0) {
+			$horizontal += $value;
+			$depth += calc($aim * $value);
+		} else if (compare($line, "down") == 0) {
+			$aim += $value;
+		} else if (compare($line, "up") == 0) {
+			$aim -= $value;
+		}
+		$line = file_line();
+	}
+	
+	print("<calc($horizontal * $depth)>");
+}
+
+[proc,split](string $input, string $split)(string,string)
+def_int $input_length = string_length($input);
+if($input_length <= 0) {
+	return("", "");
+}
+def_int $split_text_index = string_indexof_string($input, $split, 0);
+if($split_text_index == -1) {
+	return($input, "");
+}
+if($split_text_index == 0) {
+	return("", substring($input, 1, $input_length));
+}
+if(calc($split_text_index + 1) >= $input_length) {
+	return(substring($input, 0, $split_text_index), "");
+}
+return(substring($input, 0, $split_text_index), substring($input, calc($split_text_index + 1), $input_length));

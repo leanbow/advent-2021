@@ -1,0 +1,222 @@
+//Note: arrays are global
+
+[label,main]
+~day3_pt1;
+~day3_pt2;
+
+[proc,day3_pt1]
+def_int $bit_length = 12;
+def_int $ones($bit_length);
+def_int $zeros($bit_length);
+def_int $i;
+
+if (file_find("./source/aoc2021/day3/day3.txt") == true) {
+	def_string $line = file_line();
+	
+	while (string_length($line) > 0) {
+		$i = 0;
+		while ($i < $bit_length) {
+			if (string_char_at($line, $i) == 48) {
+				$zeros($i) = calc($zeros($i) + 1);
+			} else {
+				$ones($i) = calc($ones($i) + 1);
+			}
+			
+			$i++;
+		}
+		$line = file_line();
+	}
+}
+
+def_int $gamma;
+def_int $epsilon;
+$i = 0;
+while ($i < $bit_length) {
+	if ($zeros($i) > $ones($i)) {
+		$epsilon = setbit($epsilon, calc($bit_length - 1 - $i));
+	} else {
+		$gamma = setbit($gamma, calc($bit_length - 1 - $i));
+	}
+	$i++;
+}
+
+print("<calc($gamma * $epsilon)>");
+
+[proc,day3_pt2]
+def_int $bit_length = 12;
+def_int $numbers(100000);
+def_int $ones($bit_length);
+def_int $zeros($bit_length);
+def_int $numbers2(100000);
+def_int $ones2($bit_length);
+def_int $zeros2($bit_length);
+
+def_int $number_length = ~fill_data($numbers, $ones, $zeros, $numbers2, $ones2, $zeros2, $bit_length);
+def_int $oxygen_rating = ~oxygen_generator_rating($numbers, $ones, $zeros, $numbers2, $ones2, $zeros2, $bit_length, $number_length);
+def_int $scrubber_rating = ~scrubber_rating($numbers, $ones, $zeros, $numbers2, $ones2, $zeros2, $bit_length, $number_length);
+print("<calc($oxygen_rating * $scrubber_rating)>");
+
+[proc,fill_data](int $numbers(), int $ones(), int $zeros(), int $numbers2(), int $ones2(), int $zeros2(), int $bit_length)(int)
+def_int $number_length;
+
+if (file_find("./source/aoc2021/day3/day3.txt") == true) {
+	def_string $line = file_line();
+	
+	while (string_length($line) > 0) {
+		def_int $number;
+		def_int $i = 0;
+		while ($i < $bit_length) {
+			if (string_char_at($line, $i) == 48) {
+				$zeros($i) = calc($zeros($i) + 1);
+				$zeros2($i) = calc($zeros2($i) + 1);
+			} else {
+				$ones($i) = calc($ones($i) + 1);
+				$ones2($i) = calc($ones2($i) + 1);
+				$number = setbit($number, calc($bit_length - 1 - $i));
+			}
+
+			$i++;
+		}
+		
+		$numbers($number_length) = $number;		
+		$numbers2($number_length++) = $number;
+		$line = file_line();
+	}
+}
+
+return ($number_length);
+
+[proc,oxygen_generator_rating](int $numbers(), int $ones(), int $zeros(), int $a(), int $b(), int $c(), int $bit_length, int $number_length)(int)
+def_int $bit;
+def_int $i;
+
+while ($bit < $bit_length) {
+	def_int $req_char;
+	if ($zeros($bit) > $ones($bit)) {
+		$req_char = 48;
+	} else if ($ones($bit) > $zeros($bit)) {
+		$req_char = 49;
+	} else {
+		$req_char = 49;
+	}
+
+	if (file_find("./source/aoc2021/day3/day3.txt") == true) {
+		def_string $line = file_line();
+
+		while (string_length($line) > 0) {
+			if (string_char_at($line, $bit) != $req_char) {
+				def_int $value = ~binary_to_dec($line, $bit_length);
+
+				$i = 0;
+				def_int $number_index = -1;
+				while ($i < $number_length) {
+					if ($numbers($i) == $value) {
+						$number_index = $i;
+						break;
+					}
+					$i++;
+				}
+
+				if ($number_index != -1) {
+					$i = $number_index;
+					while ($i < calc($number_length - 1)) {
+						$numbers($i) = $numbers(calc($i + 1)); 
+						$i++;
+					}
+
+					$number_length--;
+					
+					$i = 0;
+					while ($i < $bit_length) {
+						if (string_char_at($line, $i) == 48) {
+							$zeros($i) = calc($zeros($i) - 1);
+						} else {
+							$ones($i) = calc($ones($i) - 1);
+						}
+						
+						$i++;
+					}
+				}
+			}
+			
+			$line = file_line();
+		}
+	}
+
+	$bit++;
+}
+
+return ($numbers($number_length));
+
+[proc,scrubber_rating](int $a(), int $b(), int $c(), int $numbers(), int $ones(), int $zeros(), int $bit_length, int $number_length)(int)
+def_int $bit;
+def_int $i;
+
+while ($bit < $bit_length) {
+	def_int $req_char;
+	if ($zeros($bit) < $ones($bit)) {
+		$req_char = 48;
+	} else if ($ones($bit) < $zeros($bit)) {
+		$req_char = 49;
+	} else {
+		$req_char = 48;
+	}
+
+	if (file_find("./source/aoc2021/day3/day3.txt") == true) {
+		def_string $line = file_line();
+
+		while (string_length($line) > 0) {
+			if (string_char_at($line, $bit) != $req_char) {
+				def_int $value = ~binary_to_dec($line, $bit_length);
+
+				$i = 0;
+				def_int $number_index = -1;
+				while ($i < $number_length) {
+					if ($numbers($i) == $value) {
+						$number_index = $i;
+						break;
+					}
+					$i++;
+				}
+
+				if ($number_index != -1) {
+					$i = $number_index;
+					while ($i < calc($number_length - 1)) {
+						$numbers($i) = $numbers(calc($i + 1)); 
+						$i++;
+					}
+
+					$number_length--;
+					
+					$i = 0;
+					while ($i < $bit_length) {
+						if (string_char_at($line, $i) == 48) {
+							$zeros($i) = calc($zeros($i) - 1);
+						} else {
+							$ones($i) = calc($ones($i) - 1);
+						}
+						
+						$i++;
+					}
+				}
+			}
+			
+			$line = file_line();
+		}
+	}
+
+	$bit++;
+}
+
+return ($numbers($number_length));
+
+[proc,binary_to_dec](string $text, int $bit_length)(int)
+def_int $value;
+def_int $i = 0;
+while ($i < $bit_length) {
+	if (string_char_at($text, $i) == 49) {
+		$value = setbit($value, calc($bit_length - 1 - $i));
+	}
+	$i++;
+}
+return ($value);

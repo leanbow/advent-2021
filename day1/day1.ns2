@@ -1,0 +1,62 @@
+[label,main]
+~day1_pt1;
+~day1_pt2;
+
+[proc,day1_pt1]
+if (file_find("./source/aoc2021/day1/day1.txt") == true) {
+	def_int $increased;
+	def_int $current = file_number();
+	def_int $prev = $current;
+
+	while ($current != -1) {
+		if ($current > $prev) {
+			$increased++;
+		}
+		
+		$prev = $current;
+		$current = file_number();
+	}
+
+	print("<$increased>");
+}
+
+[proc,day1_pt2]
+def_int $numbers(100000);
+def_int $pos;
+
+if (file_find("./source/aoc2021/day1/day1.txt") == true) {
+	def_int $num = file_number();
+	while ($num != -1) {
+		$numbers($pos++) = $num;
+		$num = file_number();
+	}
+}
+
+def_int $prev_sum = ~sum($numbers(0), $numbers(1), $numbers(2));
+def_int $sum;
+def_int $i = 1;
+def_int $num1;
+def_int $num2;
+def_int $num3;
+def_int $increased;
+
+while ($i < $pos) {
+	$num1 = $numbers($i);
+	$num2 = $numbers(calc($i + 1));
+	$num3 = $numbers(calc($i + 2));
+	if ($num3 == 0) {
+		break;
+	}
+	
+	$sum = ~sum($num1, $num2, $num3);
+	if ($sum > $prev_sum) {
+		$increased++;
+	}
+	$prev_sum = $sum;
+	$i++;
+}
+
+print("<$increased>");
+
+[proc,sum](int $val, int $val2, int $val3)(int)
+return(calc($val + $val2 + $val3));
