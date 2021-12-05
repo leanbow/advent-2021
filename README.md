@@ -8,10 +8,11 @@ Solutions for [Advent of Code 2021][aoc]. This project uses ClientScript2(for th
 
 | Day                                                                              | Part One | Part Two |
 |----------------------------------------------------------------------------------|:--------:|:--------:|
-| ✔ [Day 1: Sonar Sweep](day1)       |    🌟    |    🌟    |
-| ✔ [Day 2: Dive!](day2)             |    🌟    |    🌟    |
-| ✔ [Day 3: Binary Diagnostic](day3) |    🌟    |    🌟    |
-| ✔ [Day 4: Giant Squid](day4)       |    🌟    |    🌟    |
+| ✔ [Day 1: Sonar Sweep](day1)          |    🌟    |    🌟    |
+| ✔ [Day 2: Dive!](day2)                |    🌟    |    🌟    |
+| ✔ [Day 3: Binary Diagnostic](day3)    |    🌟    |    🌟    |
+| ✔ [Day 4: Giant Squid](day4)          |    🌟    |    🌟    |
+| ✔ [Day 5: Hydrothermal Venture](day5) |    🌟    |    🌟    |
 
 ## Acknowledgements
 
