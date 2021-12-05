@@ -1,6 +1,6 @@
 # Advent of Code 2021
 
-Solutions for [Advent of Code 2021][aoc]. This project uses ClientScript2.
+Solutions for [Advent of Code 2021][aoc]. This project uses ClientScript2(for the meme).
 
 [aoc]: https://adventofcode.com/2021/
 
