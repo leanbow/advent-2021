@@ -1,0 +1,157 @@
+[label,main]
+~day5_pt1;
+~day5_pt2;
+
+[proc,day5_pt1]
+def_int $width = 1000;
+def_int $height = 1000;
+def_int $length = calc($width * $height);
+def_int $vents($length);
+
+if (file_find("./source/aoc2021/day5/day5.txt") == true) {
+	def_string $line = file_line();
+	def_string $coord1;
+	def_string $coord2;
+	def_string $temp;
+	def_int $x1;
+	def_int $y1;
+	def_int $x2;
+	def_int $y2;
+
+	while (compare($line, "null") != 0) {
+		$coord1, $line = ~split($line, " ->");
+		$coord2 = substring($line, 3, string_length($line));
+		
+		$temp, $coord1 = ~split($coord1, ",");
+		$x1 = string_to_int($temp);
+		$y1 = string_to_int($coord1);
+
+		$temp, $coord2 = ~split($coord2, ",");
+		$x2 = string_to_int($temp);
+		$y2 = string_to_int($coord2);
+		
+		if ($y1 == $y2) {
+			~x($vents, $x1, $x2, $y1, $width);
+		} else if ($x1 == $x2) {
+			~y($vents, $y1, $y2, $x1, $width);
+		}
+		
+		$line = file_line();
+	}
+}
+
+print("<~count_vents($vents, $length)>");
+
+[proc,day5_pt2]
+def_int $width = 1000;
+def_int $height = 1000;
+def_int $length = calc($width * $height);
+def_int $vents($length);
+
+if (file_find("./source/aoc2021/day5/day5.txt") == true) {
+	def_string $line = file_line();
+	def_string $coord1;
+	def_string $coord2;
+	def_string $temp;
+	def_int $x1;
+	def_int $y1;
+	def_int $x2;
+	def_int $y2;
+
+	while (compare($line, "null") != 0) {
+		$coord1, $line = ~split($line, " ->");
+		$coord2 = substring($line, 3, string_length($line));
+		
+		$temp, $coord1 = ~split($coord1, ",");
+		$x1 = string_to_int($temp);
+		$y1 = string_to_int($coord1);
+
+		$temp, $coord2 = ~split($coord2, ",");
+		$x2 = string_to_int($temp);
+		$y2 = string_to_int($coord2);
+		
+		if ($y1 == $y2) {
+			~x($vents, $x1, $x2, $y1, $width);
+		} else if ($x1 == $x2) {
+			~y($vents, $y1, $y2, $x1, $width);
+		} else {
+			~diagonal($vents, $x1, $x2, $y1, $y2, $width);
+		}
+		
+		$line = file_line();
+	}
+}
+
+print("<~count_vents($vents, $length)>");
+
+[proc,x](int $array(), int $x1, int $x2, int $y, int $width)
+def_int $startX = min($x1, $x2);
+def_int $endX = max($x1, $x2);
+while ($startX <= $endX) {
+	def_int $index = calc($startX + $y * $width);
+	$array($index) = calc($array($index) + 1);
+	$startX++;
+}
+
+[proc,y](int $array(), int $y1, int $y2, int $x, int $width)
+def_int $startY = min($y1, $y2);
+def_int $endY = max($y1, $y2);
+while ($startY <= $endY) {
+	def_int $index = calc($x + $startY * $width);
+	$array($index) = calc($array($index) + 1);
+	$startY++;
+}
+
+[proc,count_vents](int $vents(), int $length)(int)
+def_int $i;
+def_int $sum;
+while($i < $length) {
+	if ($vents($i) > 1) {
+		$sum++;
+	}
+	$i++;
+}
+return ($sum);
+
+[proc,diagonal](int $array(), int $x1, int $x2, int $y1, int $y2, int $width)
+def_int $x = $x1;
+def_int $y = $y1;
+def_boolean $loop = true;
+
+while ($loop == true) {
+	def_int $index = calc($x + $y * $width);
+	$array($index) = calc($array($index) + 1);
+	
+	if ($x == $x2) {
+		$loop = false;
+	}
+
+	if ($x2 > $x) {
+		$x++;
+	} else {
+		$x--;
+	}
+	
+	if ($y2 > $y) {	
+		$y++;
+	} else {
+		$y--;
+	}
+}
+
+[proc,split](string $input, string $split)(string,string)
+def_int $input_length = string_length($input);
+if($input_length <= 0) {
+	return("", "");
+}
+def_int $split_text_index = string_indexof_string($input, $split, 0);
+if($split_text_index == -1) {
+	return($input, "");
+}
+if($split_text_index == 0) {
+	return("", substring($input, 1, $input_length));
+}
+if(calc($split_text_index + 1) >= $input_length) {
+	return(substring($input, 0, $split_text_index), "");
+}
+return(substring($input, 0, $split_text_index), substring($input, calc($split_text_index + 1), $input_length));
