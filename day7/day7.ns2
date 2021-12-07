@@ -1,0 +1,91 @@
+[label,main]
+~day7_pt1;
+~day7_pt2;
+
+[proc,day7_pt1]
+def_int $positions(10000);
+def_int $length;
+def_int $max;
+
+if (file_find("./source/aoc2021/day7/day7.txt") == true) {
+	def_string $line = file_line();
+	def_string $temp_string;
+	def_int $temp;
+	
+	while (string_length($line) > 0) {
+		$temp_string, $line = ~split($line, ",");
+		$temp = string_to_int($temp_string);
+		$max = max($max, $temp);
+		$positions($length++) = $temp;
+	}
+	
+}
+
+def_int $lowest_sum = ^max_32bit_int;
+def_int $i;
+while ($i < $max) {
+	def_int $sum;
+	def_int $j;
+	while ($j < $length) {
+		$sum += abs(calc($i - $positions($j)));
+		$j++;
+	}
+
+	$lowest_sum = min($lowest_sum, $sum);
+	$i++;
+}
+
+print("<$lowest_sum>");
+
+[proc,day7_pt2]
+def_int $positions(10000);
+def_int $length;
+def_int $max;
+
+if (file_find("./source/aoc2021/day7/day7.txt") == true) {
+	def_string $line = file_line();
+	def_string $temp_string;
+	def_int $temp;
+	
+	while (string_length($line) > 0) {
+		$temp_string, $line = ~split($line, ",");
+		$temp = string_to_int($temp_string);
+		$max = max($max, $temp);
+		$positions($length++) = $temp;
+	}
+	
+}
+
+def_int $lowest_sum = ^max_32bit_int;
+def_int $i;
+while ($i < $max) {
+	def_int $j;
+	def_int $sum;
+	while ($j < $length) {
+		def_int $diff = abs(calc($i - $positions($j)));
+		$sum += calc($diff * ($diff + 1) / 2);
+		$j++;
+	}
+
+	$lowest_sum = min($lowest_sum, $sum);
+	$i++;
+}
+
+print("<$lowest_sum>");
+
+[proc,split](string $input, string $split)(string,string)
+def_int $input_length = string_length($input);
+if($input_length <= 0) {
+	return("", "");
+}
+def_int $split_text_index = string_indexof_string($input, $split, 0);
+if($split_text_index == -1) {
+	return($input, "");
+}
+if($split_text_index == 0) {
+	return("", substring($input, 1, $input_length));
+}
+if(calc($split_text_index + 1) >= $input_length) {
+	return(substring($input, 0, $split_text_index), "");
+}
+return(substring($input, 0, $split_text_index), substring($input, calc($split_text_index + 1), $input_length));
